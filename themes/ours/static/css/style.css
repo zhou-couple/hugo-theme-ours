@@ -1,0 +1,5 @@
+[x-cloak] {
+    /* avoid flick before alpine.js loaded */
+    /* reference: https://alpinejs.dev/directives/cloak */
+    display: none !important;
+}
