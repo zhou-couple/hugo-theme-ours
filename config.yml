@@ -1,3 +1,10 @@
 baseURL: 'http://example.org/'
-languageCode: 'en-us'
+languageCode: 'zh-cn'
+defaultContentLanguage: 'zh'
 title: 'My New Hugo Site'
+theme: ours
+
+
+Params:
+  #页面标题的连字符
+  title_hyphen: '❤'

@@ -1,0 +1,8 @@
+{{ partial "head/meta" . }}
+{{ partial "head/favicon" . }}
+{{ partial "head/css" . }}
+{{ partial "head/script" . }}
+
+{{ block "title" . }}
+<title>{{ if .IsHome }}{{ $.Site.Title }}{{ else }}{{ .Title }} {{ print $.Site.Params.title_hyphen }} {{ $.Site.Title }}{{ end }}</title>
+{{ end }}

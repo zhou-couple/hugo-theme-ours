@@ -1,0 +1,4 @@
+{{ if isset .Site.Params "favicon" -}}
+<link rel="shortcut icon" href="{{- $.Site.Params.favicon | absURL -}}">
+<link rel="apple-touch-icon" href="{{- $.Site.Params.favicon | absURL -}}" />
+{{- end }}

@@ -1,0 +1,9 @@
+<!-- Theme CSS -->
+{{ if (fileExists "static/css/style.css") -}}
+<link rel="stylesheet" href="{{ "css/style.css" | absURL }}">
+{{- end }}
+
+<!-- Custom CSS to override theme properties (/static/style.css) -->
+{{ if (fileExists "static/style.css") -}}
+<link rel="stylesheet" href="{{ "style.css" | absURL }}">
+{{- end }}
