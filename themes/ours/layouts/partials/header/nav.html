@@ -1,4 +1,4 @@
-<div class="w-full text-gray-700 bg-white shadow">
+<div class="fixed top-0 w-full text-gray-700 bg-white shadow-md">
   <div x-data="{ open: false }"
     class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
     <div class="p-4 flex flex-row items-center justify-between">
@@ -23,8 +23,8 @@
       </button>
     </div>
 
-    <nav :class="{'flex opacity-100': open, 'hidden opacity-0': !open}"
-      class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row md:opacity-100 transition-opacity ease-in">
+    <nav :class="{'flex': open, 'hidden': !open}"
+      class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row">
       {{ $sections := $.Site.Sections }}
       {{- $currentSection := .CurrentSection -}}
       {{- range $sections -}}
