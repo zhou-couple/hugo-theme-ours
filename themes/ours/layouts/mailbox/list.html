@@ -1,14 +1,14 @@
 {{ define "main" }}
 <div class="max-w-4xl p-4 mx-2 md:mx-auto mt-16">
     <div x-data="mailbox"
-        @keydown.escape="showModal = false"
+        @keydown.escape="showModal = false; open = -1"
         class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 lg:gap-x-8 font-mono">
         <template x-for="letter in letters"
             :key="letter.id">
             {{/* <a :href="letter.href"
                 */}}
                 <a
-                @click="showModal = true"
+                @click="showModal = true; open = letter.id;"
                 class="flex flex-col p-4 border rounded-2xl shadow">
                 <div class="flex justify-end">
                     <img loading="lazy"
@@ -32,16 +32,87 @@
             :class="{ 'overflow-auto fixed inset-0 z-10 flex items-center justify-center': showModal }">
 
             <!--Dialog-->
-            <div class="relative bg-white w-11/12 max-w-xl mx-auto mt-4 rounded shadow-lg py-4 text-left px-6"
+            <div class="relative bg-white w-11/12 max-w-2xl mx-auto mt-4 rounded shadow-lg p-4 text-left"
+                x-transition
                 x-show="showModal"
-                @click.away="showModal = false">
+                @click.away="showModal = false; open = -1;">
 
                 <!--Title-->
-                <div class="flex justify-between items-center pb-3">
-                    <p class="text-2xl font-bold">Simple Modal!</p>
-                    <div class="cursor-pointer z-50"
+                <div class="flex items-start justify-between p-2 border-0">
+                    <div class="flex flex-wrap w-full p-0 m-0">
+                        <div class="relative flex-grow basis-0 w-full max-w-full"></div>
+                        <div class="relative text-right -mr-4 p-0 basis-0 flex-grow w-full">
+                            <div class="inline-block text-center align-middle bg-transparent">
+                                <img class="bg-transparent"
+                                    src="https://zhou-couple.github.io/assets/images/stamps/asia.png"
+                                    width="100"
+                                    height="100">
+                            </div>
+                            <div
+                                class="absolute w-[200px] h-[70px] right-[64px] bottom-[-15px] pt-[22px] pr-[22px] text-[20px] leading-[26px] font-serif text-[#ffc300] text-right">
+                                <div class="absolute w-[200px] h-[70px] bg-right bg-contain bg-no-repeat left-0 top-0"
+                                    style="background-image: url(https://zhou-couple.github.io/assets/images/stamps/chop.png)">
+                                </div>
+                                CN
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- content -->
+                <div class="relative overflow-auto h-[50vh]">
+                    <div class="pb-12 px-4 text-lg font-medium">
+                        <p class="whitespace-pre-wrap break-words">
+晚上好
+
+今天是周五，我最喜欢周五的晚上，好像有大把时间可以浪费，而不用忧虑明天，可惜明天总会到来。
+
+拍拍你，生活习惯不同还真的很难相处，对于他们，old habits die
+hard.而你又很难独善其身。我觉得你可以提醒一下他们，😅实习的舍友也不用太在乎影响日后相处，毕竟只是短暂的共室。加油，上！
+
+我们宿舍前几天晾衣杆塌了，因为挂的衣服太多，我的衣服受灾最少，😂因为我的衣服几乎都在外面一个公共晾衣杆上。大家拼命往杆上挂衣服，衣服太密又没有办法干，还会有一股馊味儿，最后直接塌了，我略有点庆幸早早退出战争。
+
+有个室友和另一个闹崩了，又有点其它事情，这几天她都凌晨才回来，也就避免了和我们直接照面。昨晚其他人在宿舍玩得很开心，越开心我越害怕，要是她突然回来气氛尴尬怎么办？
+
+另附美味的烤鱼😋和来自朋友圈盗图的晚霞
+
+Mollia
+                        </p>
+                        <div class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto">
+
+
+                            <div class="shrink-0">
+                                <a data-fslightbox=""
+                                    href="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg"><img
+                                        class="shrink w-auto h-40 rounded-lg shadow-xl bg-white"
+                                        src="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg"></a>
+                            </div>
+
+
+                            <div class="shrink-0">
+                                <a data-fslightbox=""
+                                    href="https://zhou-couple.github.io/assets/images/letter-img/20211015-2.jpg"><img
+                                        class="shrink w-auto h-40 rounded-lg shadow-xl bg-white"
+                                        src="https://zhou-couple.github.io/assets/images/letter-img/20211015-2.jpg"></a>
+                            </div>
+
+                        </div>
+                        <script src="https://cdn.bootcdn.net/ajax/libs/fslightbox/3.3.1/index.min.js"></script>
+                    </div>
+                </div>
+                <!--Footer-->
+                <div class="flex-grow flex items-end mt-2">
+                    <img class="rounded-[50%]"
+                        src="https://zhou-couple.github.io/assets/images/letter-img/Mollia.png"
+                        width="60"
+                        height="60">
+                    <div class="ml-4 mr-4 mt-2 flex-grow flex-shrink basis-0">
+                        <h5 class="mb-1 text-lg">Mollia</h5>
+                        <p>2021年10月15日 14:02</p>
+                    </div>
+                    <button class="modal-close bg-gray-200 p-3 rounded-lg text-white hover:bg-gray-600"
                         @click="showModal = false">
-                        <svg class="fill-current text-black"
+                        <svg class="fill-current text-white"
                             xmlns="http://www.w3.org/2000/svg"
                             width="18"
                             height="18"
@@ -50,27 +121,8 @@
                                 d="M14.53 4.53l-1.06-1.06L9 7.94 4.53 3.47 3.47 4.53 7.94 9l-4.47 4.47 1.06 1.06L9 10.06l4.47 4.47 1.06-1.06L10.06 9z">
                             </path>
                         </svg>
-                    </div>
+                    </button>
                 </div>
-
-                <!-- content -->
-                <div class="relative overflow-auto h-72">
-                    <p>Modal content can go here</p>
-                    <p>...</p>
-                    <p>...</p>
-                    <p>...</p>
-                    <p class="min-h-screen">...</p>
-                </div>
-                <!--Footer-->
-                <div class="flex justify-end pt-2">
-                    <button
-                        class="px-4 bg-transparent p-3 rounded-lg text-indigo-500 hover:bg-gray-100 hover:text-indigo-400 mr-2"
-                        @click="alert('Additional Action');">Action</button>
-                    <button class="modal-close px-4 bg-indigo-500 p-3 rounded-lg text-white hover:bg-indigo-400"
-                        @click="showModal = false">Close</button>
-                </div>
-
-
             </div>
             <!--/Dialog -->
         </div><!-- /Overlay -->
