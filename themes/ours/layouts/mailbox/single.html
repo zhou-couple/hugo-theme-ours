@@ -2,35 +2,31 @@
     {{- .Content -}}
 </div>
 
-{{/*  https://www.markusantonwolf.com/blog/guide-for-different-ways-to-access-your-image-resources/  */}}
-
+{{/* https://www.markusantonwolf.com/blog/guide-for-different-ways-to-access-your-image-resources/ */}}
 
 {{ with .Params.img }}
 <div class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto">
     {{ range $img := . }}
-    <div class="shrink-0">
-        <a data-fslightbox="{{ printf `../mailbox/images/%s.jpg` $img }}">
-            <img class="shrink w-auto h-40 rounded-lg shadow-md bg-white"
-                src="{{ printf `../mailbox/images/%s.jpg` $img }}">
-        </a>
+    {{ range where $.Site.Pages ".Section" "mailbox" }}
+    {{ with (printf "%s.jpg" $img | .Page.Resources.GetMatch) }}
+    {{ $thumb_img := .Resize "x128 webp" }}
+    <div x-data="{click: false}"
+        class="shrink-0">
+        <img @click="click = !click"
+            class="shrink w-auto rounded-lg h-32 shadow-md bg-white transition-all"
+            src="{{ $thumb_img.RelPermalink }}">
+        <div x-show="click"
+            @click="click = !click"
+            @click.away="click = false;"
+            class="h-full w-full flex justify-center p-4 fixed z-50 inset-0"
+            style="background-color: rgba(0, 0, 0, 0.5);">
+            <img class="rounded-xl transition-all object-contain"
+                src="{{ .RelPermalink }}">
+        </div>
     </div>
+    {{ end }}
+    {{ end }}
     {{ end }}
 </div>
-{{ end }}
-
-
-{{ with .Params.img }}
-<div class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto">
-    {{ range $img := . }}
-    {{ with ( printf "images/**" | $.Parent.Resources.GetMatch ) }}
-    <div class="shrink-0">
-        <a data-fslightbox=""
-            href="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg">
-            <img class="shrink w-auto h-40 rounded-lg shadow-xl bg-white"
-                src="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg">
-        </a>
-    </div>
-    {{ end }}
-    {{ end }}
 </div>
 {{ end }}

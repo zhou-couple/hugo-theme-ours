@@ -2,14 +2,11 @@
 
 <div class="max-w-4xl p-4 mx-2 md:mx-auto mt-16">
     <div x-data="mailbox"
-        @keydown.escape="showModal = false; open = -1"
+        @keydown.escape="showModal = false;"
         class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 lg:gap-x-8 font-mono">
         <template x-for="[id, letter] in Object.entries(letters)"
             :key="letter.id">
-            {{/* <a :href="letter.href"
-                */}}
-                <a
-                @click="showModal = true; open = letter.id;"
+            <a @click="showModal = true; open = letter.id;"
                 class="flex flex-col p-4 border rounded-2xl shadow">
                 <div class="flex justify-end">
                     <img loading="lazy"
@@ -36,7 +33,7 @@
             <div class="relative bg-white w-11/12 max-w-2xl mx-auto mt-4 rounded shadow-lg p-4 text-left"
                 x-transition
                 x-show="showModal"
-                @click.away="showModal = false; open = -1;">
+                @click.away="showModal = false;">
 
                 <!--Title-->
                 <div class="flex items-start justify-between p-4 border-0">
@@ -62,7 +59,8 @@
 
                 <!-- content -->
                 <div class="relative overflow-auto h-[50vh]">
-                    <div x-html="(await axios.get(letters[open].href)).data" class="pb-12 px-4 text-lg font-medium">
+                    <div x-html="(await axios.get(letters[open].href)).data"
+                        class="pb-12 px-4 text-lg font-medium">
                     </div>
                 </div>
                 <!--Footer-->
@@ -72,7 +70,8 @@
                         width="60"
                         height="60">
                     <div class="ml-4 mr-4 mt-2 flex-grow flex-shrink basis-0">
-                        <h5 class="mb-1 text-lg" x-text="letters[open].category"></h5>
+                        <h5 class="mb-1 text-lg"
+                            x-text="letters[open].category"></h5>
                         <p x-text="letters[open].date[0]+' '+letters[open].date[1]"></p>
                     </div>
                     <button class="modal-close bg-gray-200 p-3 rounded-lg text-white hover:bg-gray-600"
@@ -102,7 +101,8 @@
             open: -1,
             letters: {
                 {{ range $index, $letter:= (where $.Site.RegularPages "Section" .Section) -}}
-        {{ $index }} : { id: {{ $index }}, href: "{{ .RelPermalink }}", stamp: "{{ $letter.Params.stamp }}", summary: "{{ $letter.Summary | truncate 45 }}", category: "{{ $letter.Params.category }}", date: ["{{ $letter.Date | time.Format "2006年1月2日" }}", "{{ $letter.Date | time.Format "15:04" }}"]},
+        {{ if $letter.Params.hidden }} {{ continue }}{{ end }}
+        {{ $index }} : { id: {{ $index }}, href: "{{ .RelPermalink }}", stamp: "{{ $letter.Params.stamp }}", summary: "{{ $letter.Summary | truncate 45 }}", category: "{{ $letter.Params.category }}", date: ["{{ $letter.Date | time.Format "2006年1月2日" }}", "{{ $letter.Date | time.Format "15: 04" }}"]},
         {{ end }}
             }
         }))
