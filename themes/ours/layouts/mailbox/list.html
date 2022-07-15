@@ -1,9 +1,10 @@
 {{ define "main" }}
+
 <div class="max-w-4xl p-4 mx-2 md:mx-auto mt-16">
     <div x-data="mailbox"
         @keydown.escape="showModal = false; open = -1"
         class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-6 md:gap-x-6 lg:gap-x-8 font-mono">
-        <template x-for="letter in letters"
+        <template x-for="[id, letter] in Object.entries(letters)"
             :key="letter.id">
             {{/* <a :href="letter.href"
                 */}}
@@ -20,7 +21,7 @@
                     class="h-20 my-2 overflow-hidden text-sm"></p>
                 <h2 x-text="letter.category"
                     class="text-lg"></h2>
-                <p x-text="letter.date"
+                <p x-text="letter.date[0]"
                     class="-mt-2 text-base"></p>
             </a>
         </template>
@@ -38,13 +39,13 @@
                 @click.away="showModal = false; open = -1;">
 
                 <!--Title-->
-                <div class="flex items-start justify-between p-2 border-0">
+                <div class="flex items-start justify-between p-4 border-0">
                     <div class="flex flex-wrap w-full p-0 m-0">
                         <div class="relative flex-grow basis-0 w-full max-w-full"></div>
                         <div class="relative text-right -mr-4 p-0 basis-0 flex-grow w-full">
                             <div class="inline-block text-center align-middle bg-transparent">
                                 <img class="bg-transparent"
-                                    src="https://zhou-couple.github.io/assets/images/stamps/asia.png"
+                                    :src="'/mailbox/stamps/'+letters[open].stamp+'.png'"
                                     width="100"
                                     height="100">
                             </div>
@@ -61,54 +62,18 @@
 
                 <!-- content -->
                 <div class="relative overflow-auto h-[50vh]">
-                    <div class="pb-12 px-4 text-lg font-medium">
-                        <p class="whitespace-pre-wrap break-words">
-晚上好
-
-今天是周五，我最喜欢周五的晚上，好像有大把时间可以浪费，而不用忧虑明天，可惜明天总会到来。
-
-拍拍你，生活习惯不同还真的很难相处，对于他们，old habits die
-hard.而你又很难独善其身。我觉得你可以提醒一下他们，😅实习的舍友也不用太在乎影响日后相处，毕竟只是短暂的共室。加油，上！
-
-我们宿舍前几天晾衣杆塌了，因为挂的衣服太多，我的衣服受灾最少，😂因为我的衣服几乎都在外面一个公共晾衣杆上。大家拼命往杆上挂衣服，衣服太密又没有办法干，还会有一股馊味儿，最后直接塌了，我略有点庆幸早早退出战争。
-
-有个室友和另一个闹崩了，又有点其它事情，这几天她都凌晨才回来，也就避免了和我们直接照面。昨晚其他人在宿舍玩得很开心，越开心我越害怕，要是她突然回来气氛尴尬怎么办？
-
-另附美味的烤鱼😋和来自朋友圈盗图的晚霞
-
-Mollia
-                        </p>
-                        <div class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto">
-
-
-                            <div class="shrink-0">
-                                <a data-fslightbox=""
-                                    href="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg"><img
-                                        class="shrink w-auto h-40 rounded-lg shadow-xl bg-white"
-                                        src="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg"></a>
-                            </div>
-
-
-                            <div class="shrink-0">
-                                <a data-fslightbox=""
-                                    href="https://zhou-couple.github.io/assets/images/letter-img/20211015-2.jpg"><img
-                                        class="shrink w-auto h-40 rounded-lg shadow-xl bg-white"
-                                        src="https://zhou-couple.github.io/assets/images/letter-img/20211015-2.jpg"></a>
-                            </div>
-
-                        </div>
-                        <script src="https://cdn.bootcdn.net/ajax/libs/fslightbox/3.3.1/index.min.js"></script>
+                    <div x-html="(await axios.get(letters[open].href)).data" class="pb-12 px-4 text-lg font-medium">
                     </div>
                 </div>
                 <!--Footer-->
                 <div class="flex-grow flex items-end mt-2">
                     <img class="rounded-[50%]"
-                        src="https://zhou-couple.github.io/assets/images/letter-img/Mollia.png"
+                        :src="'https://zhou-couple.github.io/assets/images/letter-img/'+letters[open].category+'.png'"
                         width="60"
                         height="60">
                     <div class="ml-4 mr-4 mt-2 flex-grow flex-shrink basis-0">
-                        <h5 class="mb-1 text-lg">Mollia</h5>
-                        <p>2021年10月15日 14:02</p>
+                        <h5 class="mb-1 text-lg" x-text="letters[open].category"></h5>
+                        <p x-text="letters[open].date[0]+' '+letters[open].date[1]"></p>
                     </div>
                     <button class="modal-close bg-gray-200 p-3 rounded-lg text-white hover:bg-gray-600"
                         @click="showModal = false">
@@ -135,11 +100,11 @@ Mollia
         Alpine.data('mailbox', () => ({
             showModal: false,
             open: -1,
-            letters: [
+            letters: {
                 {{ range $index, $letter:= (where $.Site.RegularPages "Section" .Section) -}}
-        { id: {{ $index }}, href: "{{ .RelPermalink }}", stamp: "{{ $letter.Params.stamp }}", summary: "{{ $letter.Summary | truncate 45 }}", category: "{{ $letter.Params.category }}", date: "{{ $letter.Date | time.Format "2006年1月2日" }}"},
+        {{ $index }} : { id: {{ $index }}, href: "{{ .RelPermalink }}", stamp: "{{ $letter.Params.stamp }}", summary: "{{ $letter.Summary | truncate 45 }}", category: "{{ $letter.Params.category }}", date: ["{{ $letter.Date | time.Format "2006年1月2日" }}", "{{ $letter.Date | time.Format "15:04" }}"]},
         {{ end }}
-            ]
+            }
         }))
     });
 </script>

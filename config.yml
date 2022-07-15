@@ -4,8 +4,8 @@ defaultContentLanguage: 'zh'
 title: 'My New Hugo Site'
 theme: ours
 
-uglyURLs:
-  mailbox: true
+# uglyURLs:
+#   mailbox: true
 
 Params:
   #页面标题的连字符

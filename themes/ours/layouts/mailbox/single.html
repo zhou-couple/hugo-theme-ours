@@ -1,3 +1,36 @@
-{{ define "main" }}
-{{ .Content }}
+<div class="whitespace-pre-wrap break-words">
+    {{- .Content -}}
+</div>
+
+{{/*  https://www.markusantonwolf.com/blog/guide-for-different-ways-to-access-your-image-resources/  */}}
+
+
+{{ with .Params.img }}
+<div class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto">
+    {{ range $img := . }}
+    <div class="shrink-0">
+        <a data-fslightbox="{{ printf `../mailbox/images/%s.jpg` $img }}">
+            <img class="shrink w-auto h-40 rounded-lg shadow-md bg-white"
+                src="{{ printf `../mailbox/images/%s.jpg` $img }}">
+        </a>
+    </div>
+    {{ end }}
+</div>
+{{ end }}
+
+
+{{ with .Params.img }}
+<div class="relative w-full flex gap-6 snap-x snap-mandatory overflow-x-auto">
+    {{ range $img := . }}
+    {{ with ( printf "images/**" | $.Parent.Resources.GetMatch ) }}
+    <div class="shrink-0">
+        <a data-fslightbox=""
+            href="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg">
+            <img class="shrink w-auto h-40 rounded-lg shadow-xl bg-white"
+                src="https://zhou-couple.github.io/assets/images/letter-img/20211015-1.jpg">
+        </a>
+    </div>
+    {{ end }}
+    {{ end }}
+</div>
 {{ end }}
