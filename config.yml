@@ -7,6 +7,8 @@ theme: ours
 # uglyURLs:
 #   mailbox: true
 
+timeout: "1h"
+
 imaging:
   quality: 75
   hint: picture
