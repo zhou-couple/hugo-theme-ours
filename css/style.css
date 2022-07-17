@@ -1,0 +1,34 @@
+[x-cloak] {
+    /* avoid flick before alpine.js loaded */
+    /* reference: https://alpinejs.dev/directives/cloak */
+    display: none !important;
+}
+
+/* scroll bar for chrome */
+::-webkit-scrollbar {
+    width: 0.8em;
+    height: 1em;
+}
+
+::-webkit-scrollbar-track {
+    background: rgb(188, 188, 188);
+    border-radius: 100vw;
+    margin-block: 0.5em;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(107, 107, 107);
+    border: 0.25em solid rgb(188, 188, 188);
+    border-radius: 100vw;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgb(70, 70, 70);
+}
+
+/* scroll bar for firefox */
+@supports (scrollbar-color: red blue) {
+    * {
+        scrollbar-color: rgb(107, 107, 107) rgb(188, 188, 188);
+    }
+}
