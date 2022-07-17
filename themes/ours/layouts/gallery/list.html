@@ -1,3 +1,70 @@
 {{ define "main" }}
+<div x-data="gallery"
+     class="max-w-4xl p-4 mx-auto mt-16 flex flex-wrap justify-center gap-4">
+     <template x-for="[id, photo] in Object.entries(photos)"
+          :key="photo.id">
+          <div x-data="{show : false}"
+               @click.away="show = false"
+               x-on:mouseover="show = true"
+               x-on:mouseleave="show = false"
+               class="relative h-40 w-40 lg:h-52 lg:w-52 bg-white border shadow overflow-hidden">
+               <div x-show="show"
+                    @click="show=false"
+                    x-cloak=""
+                    x-transition:enter="transition ease-in-out duration-700"
+                    x-transition:enter-start="transform translate-y-full"
+                    x-transition:enter-end="transform translate-y-0"
+                    x-transition:leave="transition duration-700"
+                    x-transition:leave-start="transform"
+                    x-transition:leave-end="transform translate-y-full"
+                    class="absolute z-10 bg-gray-400/50 backdrop-blur-sm w-full h-full flex flex-col-reverse p-4 text-white">
+                    <a class="group text-xl font-sans font-medium"
+                         x-html="photo.title+'<span class=&quot;block max-w-0 group-hover:max-w-full transition-all duration-500 h-1 bg-white&quot;></span>'"
+                         :href="photo.href">
+                         <span
+                              class="block max-w-0 group-hover:max-w-full transition-all duration-500 h-1 bg-white"></span>
+                    </a>
+               </div>
+               <img class="object-cover w-full h-full"
+                    loading="lazy"
+                    :src="photo.cover">
+          </div>
+     </template>
+     <div class="h-0 w-44 lg:w-52"></div>
+     <div class="h-0 w-44 lg:w-52"></div>
+     <div class="h-0 w-44 lg:w-52"></div>
+     <div class="h-0 w-44 lg:w-52"></div>
+</div>
 
+<script>
+     document.addEventListener('alpine:init', () => {
+          Alpine.data('gallery', () => ({
+               photos: {
+          {{ range $index, $photo:= .Pages -}}
+               {{ if $photo.Params.hidden -}}
+                    {{ continue -}}
+               {{ end -}}
+               {{ with $cover := (printf "%s" $photo.Params.cover | $photo.Resources.GetMatch) -}}
+                    {{ $orientation:= 1 -}}
+                    {{ with $cover.Exif -}}
+                         {{ $orientation = .Tags.Orientation -}}
+                    {{ end -}}
+                    {{ $rotation:= "" -}}
+                    {{ if or (eq $orientation 1) (eq $orientation 2) -}}
+                    {{ else if or (eq $orientation 3) (eq $orientation 4) -}}
+                         {{ $rotation = "r180" -}}
+                    {{ else if or (eq $orientation 5) (eq $orientation 6) -}}
+                         {{ $rotation = "r270" -}}
+                    {{ else if or (eq $orientation 7) (eq $orientation 8) -}}
+                         {{ $rotation = "r90" -}}
+               {{ end -}}
+               {{ $cover:= (printf "x500 webp %s" $rotation | $cover.Resize) -}}
+               {{ $cover:= $cover.Fill "500x500" -}}
+               {{ $index -}} : { id: {{ $index }}, title: "{{ $photo.Title }}", href: "{{ $photo.RelPermalink }}", date: "{{ $photo.Date | time.Format "2006-01-02" }}", cover: "{{ $cover.RelPermalink }}" },
+               {{ end -}}
+          {{ end -}}
+             }
+         }))
+     });
+</script>
 {{ end }}

@@ -1,5 +1,15 @@
 {{ define "main" }}
-<div class="prose lg:prose-xl">
-    {{ .Content }}
+<div class="max-w-4xl p-4 mx-2 md:mx-auto mt-16 border shadow">
+    <div class="py-4 border-b flex flex-col sm:flex-row justify-between items-start sm:items-end">
+        <div class="prose ">
+            <h1>{{ .Title }}</h1>
+        </div>
+        <div class="text-xl text-gray-500">
+            {{ .Date | time.Format "2006-1-02"}}
+        </div>
+    </div>
+    <div class="prose py-6">
+        {{ .Content }}
+    </div>
 </div>
 {{ end }}

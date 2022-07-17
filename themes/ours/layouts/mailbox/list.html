@@ -49,7 +49,7 @@
                             <div
                                 class="absolute w-[200px] h-[70px] right-[64px] bottom-[-15px] pt-[22px] pr-[22px] text-[20px] leading-[26px] font-serif text-[#ffc300] text-right">
                                 <div class="absolute w-[200px] h-[70px] bg-right bg-contain bg-no-repeat left-0 top-0"
-                                    style="background-image: url(https://zhou-couple.github.io/assets/images/stamps/chop.png)">
+                                    style="background-image: url(/mailbox/stamps/chop.png)">
                                 </div>
                                 CN
                             </div>
@@ -66,7 +66,7 @@
                 <!--Footer-->
                 <div class="flex-grow flex items-end mt-2">
                     <img class="rounded-[50%]"
-                        :src="'https://zhou-couple.github.io/assets/images/letter-img/'+letters[open].category+'.png'"
+                        :src="'/mailbox/stamps/'+letters[open].category+'.png'"
                         width="60"
                         height="60">
                     <div class="ml-4 mr-4 mt-2 flex-grow flex-shrink basis-0">
@@ -74,7 +74,7 @@
                             x-text="letters[open].category"></h5>
                         <p x-text="letters[open].date[0]+' '+letters[open].date[1]"></p>
                     </div>
-                    <button class="modal-close bg-gray-200 p-3 rounded-lg text-white hover:bg-gray-600"
+                    <button class="modal-close bg-gray-400 p-3 rounded-lg text-white hover:bg-gray-600"
                         @click="showModal = false">
                         <svg class="fill-current text-white"
                             xmlns="http://www.w3.org/2000/svg"
@@ -98,11 +98,11 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('mailbox', () => ({
             showModal: false,
-            open: -1,
+            open: 50,
             letters: {
-                {{ range $index, $letter:= (where $.Site.RegularPages "Section" .Section) -}}
+                {{ range $index, $letter:= .Pages -}}
         {{ if $letter.Params.hidden }} {{ continue }}{{ end }}
-        {{ $index }} : { id: {{ $index }}, href: "{{ .RelPermalink }}", stamp: "{{ $letter.Params.stamp }}", summary: "{{ $letter.Summary | truncate 45 }}", category: "{{ $letter.Params.category }}", date: ["{{ $letter.Date | time.Format "2006年1月2日" }}", "{{ $letter.Date | time.Format "15: 04" }}"]},
+        {{ $index }} : { id: {{ $index }}, href: "{{ $letter.RelPermalink }}", stamp: "{{ $letter.Params.stamp }}", summary: "{{ $letter.Summary | truncate 45 }}", category: "{{ $letter.Params.category }}", date: ["{{ $letter.Date | time.Format "2006年1月2日" }}", "{{ $letter.Date | time.Format "15:04" }}"]},
         {{ end }}
             }
         }))

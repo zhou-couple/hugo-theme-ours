@@ -1,0 +1,74 @@
+{{ define "head"}}
+<link rel="stylesheet"
+    href="https://unpkg.com/photoswipe@5.2.0-beta.2/dist/photoswipe.css">
+<link rel="stylesheet"
+    href="https://unpkg.com/photoswipe-dynamic-caption-plugin/photoswipe-dynamic-caption-plugin.css">
+{{ end }}
+
+{{ define "main" }}
+<div class="max-w-4xl p-4 mx-auto mt-16">
+    <div class="pswp-gallery jg"
+        id="gallery">
+        {{ .Content}}
+    </div>
+</div>
+
+<script type="module">
+    import PhotoSwipeLightbox from 'https://unpkg.com/photoswipe@beta/dist/photoswipe-lightbox.esm.js';
+    import PhotoSwipeDynamicCaption from 'https://unpkg.com/photoswipe-dynamic-caption-plugin/photoswipe-dynamic-caption-plugin.esm.js';
+
+    const smallScreenPadding = {
+        top: 0, bottom: 0, left: 0, right: 0
+    };
+    const largeScreenPadding = {
+        top: 30, bottom: 30, left: 0, right: 0
+    };
+    const lightbox = new PhotoSwipeLightbox({
+        gallerySelector: '#gallery',
+        childSelector: '.pswp-gallery__item',
+        // optionaly adjust viewport
+        paddingFn: (viewportSize) => {
+            return viewportSize.x < 700 ? smallScreenPadding : largeScreenPadding
+        },
+        pswpModule: () => import('https://unpkg.com/photoswipe@beta/dist/photoswipe.esm.js')
+    });
+
+    const captionPlugin = new PhotoSwipeDynamicCaption(lightbox, {
+        mobileLayoutBreakpoint: 700,
+        type: 'auto',
+        mobileCaptionOverlapRatio: 1
+    });
+
+    lightbox.init();
+</script>
+
+{{/*  https://stackoverflow.com/questions/41504162/is-it-possible-to-implement-a-flickr-like-justified-gallery-in-pure-css  */}}
+<style>
+    .jg {
+        --min-width: 20%;
+        --row-height: 10vh;
+        --max-row-height: 40vh;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0.25rem;
+      }
+      
+      .jg > div {
+        --ratio: calc(var(--w) / var(--h));
+        flex-grow: calc(var(--ratio) * 100);
+        flex-basis: calc(var(--ratio) * var(--row-height));
+        margin: 0.25rem;
+        min-width: var(--min-width);
+      }
+      
+      .jg > div > a > img {
+        display: block;
+        width: 100%;
+        height: auto;
+        min-width: 100%;
+        min-height: 100%;
+        max-height: var(--max-row-height);
+        object-fit: cover;
+      }
+</style>
+{{ end }}

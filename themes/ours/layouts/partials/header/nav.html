@@ -1,10 +1,11 @@
-<div class="fixed top-0 w-full text-gray-700 bg-white shadow-md">
+<div class="fixed top-0 z-20 w-full text-gray-700 bg-white/80 backdrop-blur-sm shadow-md">
   <div x-data="{ open: false }"
     class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
     <div class="p-4 flex flex-row items-center justify-between">
       <a href="{{- `/` | absURL -}}"
         class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg focus:outline-none focus:shadow-outline">
         {{ $.Site.Title }}
+        <span id="day" class="text-gray-500 text-xs">天</span>
       </a>
       <button class="md:hidden rounded-lg focus:outline-none focus:shadow-outline"
         @click="open = !open">
@@ -26,19 +27,39 @@
     <nav :class="{'flex': open, 'hidden': !open}"
       class="flex-col flex-grow pb-4 md:pb-0 hidden md:flex md:justify-end md:flex-row">
       {{ $sections := $.Site.Sections }}
-      {{- $currentSection := .CurrentSection -}}
+      {{- $currentSection := .Section -}}
       {{- range $sections -}}
       {{ if not (eq .Name $.Site.Title) }}
       <a class="px-4 py-2 mt-2 text-sm font-semibold text-center
-      {{ if eq $currentSection .CurrentSection }}
+      {{ if eq $currentSection .Section }}
       text-gray-900 bg-gray-200
       {{ else }}
       bg-transparent
       {{ end }}
       rounded-lg md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline"
-        href="{{ .Permalink }}">{{ .Title }}</a>
+        href="{{ .Permalink }}">{{ with .Params.icon}}{{ . | safeHTML }}&nbsp;{{ end }} {{ .Title }}</a>
       {{ end }}
       {{ end }}
     </nav>
   </div>
 </div>
+
+<script>
+  function count() {
+    let myDate = new Date();
+    let d = Math.floor((myDate - (new Date("2021-9-11"))) / 1000 / 60 / 60 / 24);
+    let h = myDate.getHours();
+    let m = myDate.getMinutes();
+    let s = myDate.getSeconds();
+    let day = document.getElementById("day");
+    //let hour = document.getElementById("hour");
+    //let minute = document.getElementById("minute");
+    //let second = document.getElementById("second");
+    day.innerHTML = d+"天";
+    //hour.style.setProperty("--value", h);
+    //minute.style.setProperty("--value", m);
+    //second.style.setProperty("--value", s);
+    setTimeout(count, 1000);
+  }
+  count();
+</script>

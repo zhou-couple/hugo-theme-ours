@@ -57,3 +57,18 @@ Hugo 会根据主题中设定的规则，将我们所写的内容拼装成一个
 `text-xl` 就是 text extra large（加大字体）。还不够大？没事，我们还有 `text-2xl`、`text-3xl` 等等。这一部分对应文档中 [字体大小](https://www.tailwindcss.cn/docs/font-size)。
 
 Tailwind CSS 已通过 `<script>` 得到方式引入，换言之，我们不需要安装就可以直接使用！
+
+## hugo-theme-ours 的使用方法
+
+### gallery
+
+相册中是相片，对应的文件夹是 `content/gallery`，里面一个文件夹对应一本相册，照片放里面即可。另外每本相册有一个展示文档 `index.md`，通过编辑这个文档，我们可以组织我们的图片展示的顺序，为图片配上说明文字。
+
+### 信箱
+
+信箱中是以前在 Slowly 上往来的信件，对应的文件夹是 `content/mailbox`，里面有四个文件夹：
+
+- `凌晨1点15`：峰峰写的信
+- `Mollia`：美美写的信
+- `images`：信件中出现的图片
+- `stamps`：邮票

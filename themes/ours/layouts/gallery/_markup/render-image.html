@@ -1,0 +1,36 @@
+{{ $image := .Page.Resources.GetMatch (printf "%s" (.Destination | safeURL)) }}
+{{ $orientation:= 1 -}}
+{{ with $image.Exif -}}
+{{ $orientation = .Tags.Orientation -}}
+{{ end -}}
+{{ $rotation:= "" -}}
+{{ if or (eq $orientation 1) (eq $orientation 2) -}}
+{{ else if or (eq $orientation 3) (eq $orientation 4) -}}
+{{ $rotation = "r180" -}}
+{{ else if or (eq $orientation 5) (eq $orientation 6) -}}
+{{ $rotation = "r270" -}}
+{{ else if or (eq $orientation 7) (eq $orientation 8) -}}
+{{ $rotation = "r90" -}}
+{{ end }}
+{{ $thumbnail := (printf "500x webp %s" $rotation | $image.Resize) -}}
+{{ $image := (printf "%dx webp %s" $image.Width $rotation | $image.Resize) -}}
+
+{{ $alt := .PlainText | safeHTML }}
+{{ $caption := "" }}
+{{ with .Title }}
+{{ $caption = . | markdownify }}
+{{ end }}
+
+<div class="pswp-gallery__item h-auto w-auto"
+    style="--w: {{ $thumbnail.Width }}; --h: {{ $thumbnail.Height }}">
+    <a href="{{ $image.RelPermalink }}"
+        data-pswp-width="{{ $image.Width }}"
+        data-pswp-height="{{ $image.Height }}"
+        target="_blank">
+        <img src="{{ $thumbnail.RelPermalink }}"
+            loading="lazy"
+            alt="{{ $alt }}"
+            title="{{ $alt }}"/>
+    </a>
+    <div class="pswp-caption-content">{{ $caption }}</div>
+</div>

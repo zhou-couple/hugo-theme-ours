@@ -1,0 +1,59 @@
+{{ define "main" }}
+<!-- https://codepen.io/QJan84/pen/zYvRMMw -->
+<div class="max-w-4xl p-4 mx-2 md:mx-auto mt-16">
+    <div class="bg-white max-w-2xl mx-auto border-gray-200"
+        x-data="calendar">
+        <ul class="shadow-box">
+            <template x-for="(day, id) in days">
+                <li class="relative border first-of-type:rounded-t-3xl last-of-type:rounded-b-3xl border-gray-200">
+                    <button type="button"
+                        class="w-full px-8 pt-6 pb-4 text-left"
+                        @click="selected !== id ? selected = id : selected = null">
+                        <div class="flex flex-col sm:flex-row items-center justify-between">
+                            <span class="text-base"
+                                x-text="day.date"></span>
+                            <span class="text-xl"
+                                x-text="day.title"></span>
+                        </div>
+                    </button>
+
+                    <div class="relative overflow-hidden transition-all max-h-0 duration-700 flex flex-col"
+                        x-bind:style="selected == id ? 'max-height: ' + $el.scrollHeight + 'px' : ''">
+                        <div x-html="day.summary" class="px-8">
+                            
+                        </div>
+                        <div class="p-6 pt-2 flex flex-row-reverse">
+                            <a :href="day.href">
+                                <button
+                                    class="bg-gray-300 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded-full inline-flex items-center">
+                                    <i class="fa fa-solid fa-link mr-1"></i>
+                                    <span>阅读</span>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </li>
+            </template>
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('calendar', () => ({
+            selected: null,
+            days: [
+                {{ range $index, $day:= .Pages -}}
+        {
+            date: "{{ $day.Date | time.Format "2006-01-02" }}",
+            title: "{{ $day.Title }}",
+            summary: "{{ $day.Summary }}",
+            href: "{{ $day.RelPermalink }}"
+        },
+        {{ end }}
+            ]
+        }))
+    });
+</script>
+{{ end }}

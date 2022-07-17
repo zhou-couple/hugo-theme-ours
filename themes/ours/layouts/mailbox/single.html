@@ -13,20 +13,21 @@
     <div x-data="{click: false}"
         class="shrink-0">
         <img @click="click = !click"
-            class="shrink w-auto rounded-lg h-32 shadow-md bg-white transition-all"
+            class="shrink w-auto rounded-lg h-32 shadow-md"
             src="{{ $thumb_img.RelPermalink }}">
         <div x-show="click"
+        x-transition:enter=""
             @click="click = !click"
             @click.away="click = false;"
-            class="h-full w-full flex justify-center p-4 fixed z-50 inset-0"
+            class="h-full w-full flex justify-center p-4 pt-20 fixed z-50 inset-0 transition-all"
             style="background-color: rgba(0, 0, 0, 0.5);">
-            <img class="rounded-xl transition-all object-contain"
+            <img class="rounded-xl object-contain"
+                loading="lazy"
                 src="{{ .RelPermalink }}">
         </div>
     </div>
     {{ end }}
     {{ end }}
     {{ end }}
-</div>
 </div>
 {{ end }}
